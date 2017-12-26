@@ -20,9 +20,13 @@ func main() {
 	if *channelName == "" {
 		*channelName = "general"
 	}
-	log.Print(*token, *channelName)
 
 	api := slack.New(*token)
+	if _, err := api.AuthTest(); err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
 	fileId := ""
 	rtm := api.NewRTM()
 	go rtm.ManageConnection()
