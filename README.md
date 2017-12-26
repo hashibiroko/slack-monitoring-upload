@@ -12,13 +12,13 @@ $ go get github.com/hashibiroko/slack-monitoring-upload
 
 ## Usage
 
-Example 1:
+#### Example 1:
 
 ```
 $ slack-monitoring-upload -token=xxxxxx-xxxxxxxxx -channel=random
 ```
 
-Example 2: setting environment
+#### Example 2: setting environment
 
 ```
 $ export SLACK_USER_TOKEN="xxxxxx-xxxxxxxxx"
@@ -26,7 +26,7 @@ $ export SLACK_CHANNEL_NAME="random"
 $ slack-monitoring-upload
 ```
 
-Example 3: using docker
+#### Example 3: using docker
 
 ```
 $ docker run -itd --name slack-monitoring-upload -e SLACK_USER_TOKEN=xxxxxx-xxxxxxxxx -e SLACK_CHANNEL_NAME=random hashibiroko/slack-monitoring-upload
