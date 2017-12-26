@@ -11,29 +11,14 @@ import (
 
 func main() {
 	godotenv.Load()
-	token := flag.String("token", os.Getenv("SLACK_BOT_TOKEN"), "Set Slack Bot Token")
+	token := flag.String("token", os.Getenv("SLACK_USER_TOKEN"), "Set Slack User Token")
 	channelName := flag.String("channel", "general", "Set the channel name on which the message is posted")
 	flag.Parse()
 
 	api := slack.New(*token)
+	fileId := ""
 	rtm := api.NewRTM()
 	go rtm.ManageConnection()
-
-	channelId := ""
-	fileId := ""
-	channels, _ := rtm.GetChannels(false)
-
-	for _, channel := range channels {
-		if channel.Name == *channelName {
-			channelId = channel.ID
-			break
-		}
-	}
-
-	if channelId == "" {
-		log.Fatal(fmt.Sprintf("Not found channel <%s>\n", *channelName))
-		os.Exit(1)
-	}
 
 	for {
 		select {
@@ -45,6 +30,11 @@ func main() {
 				}
 				fileId = ev.FileID
 				go func() {
+					channel, err := api.JoinChannel(*channelName)
+					if err != nil {
+						log.Println(err)
+						return
+					}
 					file, _, _, _ := rtm.GetFileInfo(fileId, 1, 1)
 					text := fmt.Sprintf("File uploaded <%s|%s> (%dKB) by <@%s>",
 						file.URLPrivate, file.Name, file.Size/1000, file.User)
@@ -53,7 +43,7 @@ func main() {
 						UnfurlLinks: false,
 						UnfurlMedia: false,
 					}
-					rtm.PostMessage(channelId, text, params)
+					rtm.PostMessage(channel.ID, text, params)
 				}()
 			default:
 			}

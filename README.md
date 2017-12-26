@@ -20,5 +20,5 @@ $ slack-monitoring-upload -token=xxxxxx-xxxxxxxxx channel=random
 
 | name | description | default | require |
 | :--- | :---------- | :-----: | :-----: |
-| token | Set Slack Bot Token |  | true |
+| token | Set Slack User Token |  | true |
 | channel | Set the channel name on which the message is posted | general |  |
