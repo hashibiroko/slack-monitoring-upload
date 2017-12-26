@@ -11,9 +11,16 @@ import (
 
 func main() {
 	godotenv.Load()
-	token := flag.String("token", os.Getenv("SLACK_USER_TOKEN"), "Set Slack User Token")
-	channelName := flag.String("channel", "general", "Set the channel name on which the message is posted")
+	token := flag.String("token", os.Getenv("SLACK_USER_TOKEN"),
+		"Set Slack User Token")
+	channelName := flag.String("channel", os.Getenv("SLACK_CHANNEL_NAME"),
+		"Set the channel name on which the message is posted")
 	flag.Parse()
+
+	if *channelName == "" {
+		*channelName = "general"
+	}
+	log.Print(*token, *channelName)
 
 	api := slack.New(*token)
 	fileId := ""
